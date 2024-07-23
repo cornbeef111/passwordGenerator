@@ -16,10 +16,25 @@ function App() {
       str += '0123456789'
     }
     if(charAllowed){
-      str += ''
+      str += '!@#$%^&*()_+'
     }
-  })
+    for(let i = 1; i < length; i++){
+      const char = Math.floor(Math.random() * str.length + 1)
+      pass += str.charAt(char)
+    }
 
+    setPassword(pass)
+  }, [length, numberAllowed, charAllowed])
+
+  React.useEffect(() =>{
+      generatePassword()
+  }, [length, numberAllowed, charAllowed])
+
+  const copyTextToClipboard = () => {
+    window.navigator.clipboard.writeText(password)
+    passwordRef.current.select()
+  }
+  const passwordRef = React.useRef(null)
   return (
     <div className='w-full max-w-md mx-auto shadow-lg bg-gray-800 px-4 py-3 my-8 rounded-lg text-orange-500'>
          <h1 className='text-3xl text-center font-bold my-3 text-white'> Password Generator</h1>
@@ -28,9 +43,14 @@ function App() {
           value={password}
           placeholder='Password'
           readOnly
+          ref={passwordRef}
           className='w-full outline-none px-3 py-1'
           />
-          <button className='bg-blue-700 px-3 py-0.5 text-white'>Copy</button>
+          <button 
+          className='bg-blue-700 px-3 py-0.5 text-white'
+          onClick={copyTextToClipboard}
+          >
+            Copy</button>
          </div>
 
          <div className='flex gap-2'>
